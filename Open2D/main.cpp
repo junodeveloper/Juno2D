@@ -6,10 +6,10 @@
 //  Copyright (c) 2015년 황준호. All rights reserved.
 //
 
-#include <iostream>
+#include "CMain.h"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    CMain *cmain = new CMain();
+    cmain->Start();
     return 0;
 }

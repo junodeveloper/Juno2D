@@ -7,7 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00E32F4F1AC57E8400F2961A /* CPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E32F4D1AC57E8400F2961A /* CPolygon.cpp */; };
+		00E32F521AC7D18300F2961A /* CGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E32F501AC7D18300F2961A /* CGroup.cpp */; };
 		00E917DE1AC426F400E8968D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917DD1AC426F400E8968D /* main.cpp */; };
+		00E917E61AC426FE00E8968D /* CMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917E41AC426FE00E8968D /* CMain.cpp */; };
+		00E917E91AC4271600E8968D /* CSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917E71AC4271600E8968D /* CSprite.cpp */; };
+		00E917EC1AC4271D00E8968D /* CObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917EA1AC4271D00E8968D /* CObject.cpp */; };
+		00E917EF1AC4272400E8968D /* Vector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917ED1AC4272400E8968D /* Vector2D.cpp */; };
+		00E917F21AC4274500E8968D /* CSDL_Setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917F01AC4274500E8968D /* CSDL_Setup.cpp */; };
+		00E917F51AC427BF00E8968D /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E917F31AC427BF00E8968D /* SDL2_image.framework */; };
+		00E917F61AC427BF00E8968D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E917F41AC427BF00E8968D /* SDL2.framework */; };
+		00E917F81AC427D400E8968D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E917F71AC427D400E8968D /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +33,25 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00E32F4D1AC57E8400F2961A /* CPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPolygon.cpp; sourceTree = "<group>"; };
+		00E32F4E1AC57E8400F2961A /* CPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPolygon.h; sourceTree = "<group>"; };
+		00E32F501AC7D18300F2961A /* CGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CGroup.cpp; sourceTree = "<group>"; };
+		00E32F511AC7D18300F2961A /* CGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGroup.h; sourceTree = "<group>"; };
 		00E917DA1AC426F400E8968D /* Open2D */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Open2D; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E917DD1AC426F400E8968D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		00E917E41AC426FE00E8968D /* CMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CMain.cpp; sourceTree = "<group>"; };
+		00E917E51AC426FE00E8968D /* CMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMain.h; sourceTree = "<group>"; };
+		00E917E71AC4271600E8968D /* CSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSprite.cpp; sourceTree = "<group>"; };
+		00E917E81AC4271600E8968D /* CSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSprite.h; sourceTree = "<group>"; };
+		00E917EA1AC4271D00E8968D /* CObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CObject.cpp; sourceTree = "<group>"; };
+		00E917EB1AC4271D00E8968D /* CObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CObject.h; sourceTree = "<group>"; };
+		00E917ED1AC4272400E8968D /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2D.cpp; sourceTree = "<group>"; };
+		00E917EE1AC4272400E8968D /* Vector2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector2D.h; sourceTree = "<group>"; };
+		00E917F01AC4274500E8968D /* CSDL_Setup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSDL_Setup.cpp; sourceTree = "<group>"; };
+		00E917F11AC4274500E8968D /* CSDL_Setup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDL_Setup.h; sourceTree = "<group>"; };
+		00E917F31AC427BF00E8968D /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		00E917F41AC427BF00E8968D /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		00E917F71AC427D400E8968D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +59,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E917F81AC427D400E8968D /* OpenGL.framework in Frameworks */,
+				00E917F51AC427BF00E8968D /* SDL2_image.framework in Frameworks */,
+				00E917F61AC427BF00E8968D /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +71,9 @@
 		00E917D11AC426F400E8968D = {
 			isa = PBXGroup;
 			children = (
+				00E917F71AC427D400E8968D /* OpenGL.framework */,
+				00E917F31AC427BF00E8968D /* SDL2_image.framework */,
+				00E917F41AC427BF00E8968D /* SDL2.framework */,
 				00E917DC1AC426F400E8968D /* Open2D */,
 				00E917DB1AC426F400E8968D /* Products */,
 			);
@@ -58,6 +91,20 @@
 			isa = PBXGroup;
 			children = (
 				00E917DD1AC426F400E8968D /* main.cpp */,
+				00E917E41AC426FE00E8968D /* CMain.cpp */,
+				00E917E51AC426FE00E8968D /* CMain.h */,
+				00E917E71AC4271600E8968D /* CSprite.cpp */,
+				00E917E81AC4271600E8968D /* CSprite.h */,
+				00E917EA1AC4271D00E8968D /* CObject.cpp */,
+				00E917EB1AC4271D00E8968D /* CObject.h */,
+				00E917ED1AC4272400E8968D /* Vector2D.cpp */,
+				00E917EE1AC4272400E8968D /* Vector2D.h */,
+				00E917F01AC4274500E8968D /* CSDL_Setup.cpp */,
+				00E917F11AC4274500E8968D /* CSDL_Setup.h */,
+				00E32F4D1AC57E8400F2961A /* CPolygon.cpp */,
+				00E32F4E1AC57E8400F2961A /* CPolygon.h */,
+				00E32F501AC7D18300F2961A /* CGroup.cpp */,
+				00E32F511AC7D18300F2961A /* CGroup.h */,
 			);
 			path = Open2D;
 			sourceTree = "<group>";
@@ -118,7 +165,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E32F4F1AC57E8400F2961A /* CPolygon.cpp in Sources */,
+				00E917E61AC426FE00E8968D /* CMain.cpp in Sources */,
+				00E917E91AC4271600E8968D /* CSprite.cpp in Sources */,
+				00E32F521AC7D18300F2961A /* CGroup.cpp in Sources */,
+				00E917EC1AC4271D00E8968D /* CObject.cpp in Sources */,
+				00E917EF1AC4272400E8968D /* Vector2D.cpp in Sources */,
 				00E917DE1AC426F400E8968D /* main.cpp in Sources */,
+				00E917F21AC4274500E8968D /* CSDL_Setup.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +256,10 @@
 		00E917E21AC426F400E8968D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +267,10 @@
 		00E917E31AC426F400E8968D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -232,6 +294,7 @@
 				00E917E31AC426F400E8968D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
