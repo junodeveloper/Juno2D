@@ -15,6 +15,7 @@
 class Vector2D {
 public:
     Vector2D();
+    Vector2D(int none);
     Vector2D(double x, double y);
     ~Vector2D();
     Vector2D unitVector();
@@ -24,6 +25,7 @@ public:
     Vector2D operator*(const double n);
     Vector2D operator-(const Vector2D dst);
     Vector2D operator-();
+    bool none();
     double x, y;
 };
 double Dot(const Vector2D& a, const Vector2D& b);

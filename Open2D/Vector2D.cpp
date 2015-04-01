@@ -11,6 +11,9 @@
 Vector2D::Vector2D() {
     x = 0, y = 0;
 }
+Vector2D::Vector2D(int none) {
+    this->x = 0.0f, this->y = 0.0f;
+}
 Vector2D::Vector2D(double x, double y) {
     this->x = x, this->y = y;
 }
@@ -44,6 +47,9 @@ Vector2D Vector2D::operator-() {
     ret.x = this->x * -1;
     ret.y = this->y * -1;
     return Vector2D(this->x * -1, this->y * -1);
+}
+bool Vector2D::none() {
+    return (x == 0.0f && y == 0.0f);
 }
 
 double Dot(const Vector2D& a, const Vector2D& b) {

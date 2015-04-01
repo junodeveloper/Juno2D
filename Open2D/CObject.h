@@ -39,6 +39,7 @@ public:
     void accelerate(Vector2D& delta);
     void accelerate(double dVx, double dVy);
     void angularAcc(double delta);
+    bool isInPolygon(Vector2D& p);
 
     Vector2D transRotation(const Vector2D& dst);
     Vector2D GetNormal(int index);

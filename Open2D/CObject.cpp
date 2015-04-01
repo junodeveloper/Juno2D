@@ -176,73 +176,95 @@ double Penetration(int *faceIndex, CObject *A, CObject *B) {
     return best;
 }
 
+bool CObject::isInPolygon(Vector2D& p) {
+    double product;
+    for(int i=0;i<m_polygon->m_vertexCount;i++) {
+        Vector2D v = GetVertexVec(i);
+        Vector2D s = GetVertexAbs(i) - v;
+        product = Cross(v, p - s);
+        if(product <= 0) return false;
+    }
+    return true;
+}
+
 void ResolveCollision(CObject *A, CObject *B) {
-    int normal1, normal2;
-    double pene1 = Penetration(&normal1, A, B);
-    double pene2 = Penetration(&normal2, B, A);
-    if(pene1>=0 || pene2>=0) return;
-    Vector2D normal, p;
-    Vector2D pVertex, pVec;
-    double pene;
-    int sIndex;
-    if(pene1 > pene2) {
-        normal = -A->GetNormal(normal1);
-        pVertex = A->GetVertexAbs(normal1);
-        pVec = A->GetVertexVec(normal1);
-        p = B->GetSupport(&sIndex, normal);
-        pene = pene1;
+    int nA, nB;
+    int selected = 0;
+    double depthA = Penetration(&nA, A, B);
+    double depthB = Penetration(&nB, B, A);
+    if(depthA>=0 || depthB>=0) return;
+    Vector2D normal, pVertex;
+    int pIndex;
+    double minDepth;
+    if(depthA > depthB) {
+        normal = -A->GetNormal(nA);
+        pVertex = B->GetSupport(&pIndex, normal);
+        minDepth = depthA;
+        selected = 0;
     } else {
-        normal = B->GetNormal(normal2);
-        pVertex = B->GetVertexAbs(normal2);
-        pVec = B->GetVertexVec(normal2);
-        p = A->GetSupport(&sIndex, -normal);
-        pene = pene2;
+        normal = B->GetNormal(nB);
+        pVertex = A->GetSupport(&pIndex, -normal);
+        minDepth = depthB;
+        selected = 1;
     }
     Vector2D rv = B->velocity - A->velocity;
     double velAlongNormal = Dot(rv, normal);
-    Vector2D from = A->GetVertexAbs(normal1), vec = A->GetNormal(normal1) * 20;
-    C_DrawVec(from, vec);
     
     const float percent = 0.8; // usually 20% to 80%
-    Vector2D correction = normal * (pene / (A->inv_mass + B->inv_mass)) * percent;
+    Vector2D correction = normal * (minDepth / (A->inv_mass + B->inv_mass)) * percent;
     A->move(correction * -A->inv_mass);
     B->move(correction * B->inv_mass);
     
     if(velAlongNormal<0) return;
     
+    Vector2D cp1 = Vector2D(0), cp2 = Vector2D(0);
+    Vector2D p1, p2;
+    int sIndex;
+    if(selected) {
+        p1 = pVertex;
+        p2 = A->GetVertexAbs((pIndex + 1) % A->polygon()->m_vertexCount);
+    } else {
+        p1 = A->GetSupport(&sIndex, -normal);
+        p2 = A->GetVertexAbs((sIndex + 1) % A->polygon()->m_vertexCount);
+    }
+    if(B->isInPolygon(p1)) cp1 = p1;
+    if(B->isInPolygon(p2)) cp2 = p2;
+    if(cp1.none() && cp2.none()) {
+        if(!selected) {
+            p1 = pVertex;
+            p2 = B->GetVertexAbs((pIndex + 1) % B->polygon()->m_vertexCount);
+        } else {
+            p1 = B->GetSupport(&sIndex, normal);
+            p2 = B->GetVertexAbs((sIndex + 1) % B->polygon()->m_vertexCount);
+        }
+        if(A->isInPolygon(p1)) cp1 = p1;
+        if(A->isInPolygon(p2)) cp2 = p2;
+        printf("ONEONEONOEE\n");
+    }
+    Vector2D contact(0);
+    if(!cp1.none() && !cp2.none())
+        contact = (cp1 + cp2) / 2.0f;
+    else if(!cp1.none())
+        contact = cp1;
+    else if(!cp2.none())
+        contact = cp2;
+    
+    Vector2D COMA = A->GetLeftTop() + A->GetCOM();
+    Vector2D COMB = B->GetLeftTop() + B->GetCOM();
     Vector2D rA, rB;
-    Vector2D v, dVec1, dVec2;
-    std::vector<Vector2D> contacts;
-    for(int i=0;i<A->polygon()->m_vertexCount;i++) {
-        v = A->GetVertexAbs(i);
-        dVec1 = v - pVertex;
-        dVec2 = v - (pVertex - pVec);
-        if(Dot(dVec1, normal)<0 && Dot(dVec1, pVec)<0 && Dot(dVec2, -pVec)<0)
-            contacts.push_back(v);
-    }
-    for(int i=0;i<B->polygon()->m_vertexCount;i++) {
-        v = B->GetVertexAbs(i);
-        dVec1 = v - pVertex;
-        dVec2 = v - (pVertex - pVec);
-        if(Dot(dVec1, normal)<0 && Dot(dVec1, pVec)<0 && Dot(dVec2, -pVec)<0)
-            contacts.push_back(v);
-    }
-    Vector2D centerContact = Vector2D(0,0);
-    for(int i=0;i<contacts.size();i++) {
-        centerContact = centerContact + contacts[i];
-    }
-    printf("Contact Size  %d\n",contacts.size());
-    if(contacts.size()>0)
-        centerContact = centerContact / contacts.size();
-    rA = centerContact - (A->GetLeftTop() + A->GetCOM());
-    rB = centerContact - (B->GetLeftTop() + B->GetCOM());
-    /*Vector2D r1, r2;
-    r1 = p - (A->GetLeftTop() + A->GetCOM());
-    r2 = p - (B->GetLeftTop() + B->GetCOM());*/
-    Vector2D COM1 = A->GetLeftTop() + A->GetCOM();
-    Vector2D COM2 = B->GetLeftTop() + B->GetCOM();
-    C_DrawVec(COM1, rA, 1);
-    C_DrawVec(COM2, rB, 1);
+    
+    rA = contact - COMA;
+    rB = contact - COMB;
+    
+    C_DrawVec(COMA, rA, 1);
+    C_DrawVec(COMB, rB, 1);
+    
+    printf("cp1  %f %f\n",cp1.x, cp1.y);
+    printf("cp2  %f %f\n",cp2.x, cp2.y);
+    printf("contact  %f %f\n",contact.x, contact.y);
+    printf("COMA  %f %f\n",COMA.x, COMA.y);
+    printf("COMB  %f %f\n",COMB.x, COMB.y);
+    printf("A->isInPolygon(COMA) : %d\n", A->isInPolygon(COMA));
     
     double e = Min(A->restitution, B->restitution);
     double j = -(1 + e) * velAlongNormal;

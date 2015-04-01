@@ -18,8 +18,8 @@ void CMain::Update() {
     if(rightPushed) obj1->accelerate(0.2,0);
     if(upPushed) obj1->accelerate(0,-0.2);
     if(downPushed) obj1->accelerate(0,0.2);
-    if(pushed['a' - 'a']) obj1->rotate(0.3);
-    if(pushed['s' - 'a']) obj1->rotate(-0.3);
+    if(pushed['a' - 'a']) obj1->angularAcc(0.05);
+    if(pushed['s' - 'a']) obj1->angularAcc(-0.05);
     //printf("penetration : %f\n", Penetration(obj1, obj2));
     group->update();
 }
