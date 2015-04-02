@@ -20,6 +20,10 @@ void CMain::Update() {
     if(downPushed) obj1->accelerate(0,0.2);
     if(pushed['a' - 'a']) obj1->angularAcc(0.05);
     if(pushed['s' - 'a']) obj1->angularAcc(-0.05);
+    if(pushed['d' - 'a']) {
+        obj1->setAngle(0);
+        obj1->setAngularVel(0);
+    }
     //printf("penetration : %f\n", Penetration(obj1, obj2));
     group->update();
 }

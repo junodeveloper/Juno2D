@@ -10,6 +10,7 @@
 
 double square(double n) { return n * n; }
 double Min(double A, double B) { return A<B?A:B; }
+double Absf(double n) { return n>0?n:-n; }
 CObject::CObject(CSDL_Setup *csdl, int type) {
     fixed = false;
     m_csdl = csdl;
@@ -48,6 +49,8 @@ CObject::CObject(CSDL_Setup *csdl, int type) {
     angle = 0.f;
     angularVel = 0.f;
     restitution = 0.5;
+    staticFriction = 0.2;
+    dynamicFriction = 0.05;
     pos = Vector2D(0,0);
     velocity = Vector2D(0,0);
 }
@@ -63,6 +66,12 @@ void CObject::move(double dx, double dy) {
 }
 void CObject::rotate(double dAngle) {
     angle += dAngle;
+}
+void CObject::setAngle(double angle) {
+    this->angle = angle;
+}
+void CObject::setAngularVel(double angularVel) {
+    this->angularVel = angularVel;
 }
 void CObject::draw() {
     m_sprite->Draw(pos.x, pos.y, angle);
@@ -208,6 +217,9 @@ void ResolveCollision(CObject *A, CObject *B) {
         selected = 1;
     }
     Vector2D rv = B->velocity - A->velocity;
+    printf("A->velocity  %f %f\n",A->velocity.x, A->velocity.y);
+    printf("B->velocity  %f %f\n",B->velocity.x, B->velocity.y);
+    printf("first rv  %f %f\n",rv.x, rv.y);
     double velAlongNormal = Dot(rv, normal);
     
     const float percent = 0.8; // usually 20% to 80%
@@ -277,4 +289,41 @@ void ResolveCollision(CObject *A, CObject *B) {
     //Vector2D rB = BImpulse * B->inv_mass / B->angularVel;
     A->applyImpulse(AImpulse, rA);
     B->applyImpulse(BImpulse, rB);
+    
+    
+    
+    printf("rv  %lf %lf\n", rv.x, rv.y);
+    printf("normal  %lf %lf\n", normal.x, normal.y);
+    
+    Vector2D tangent = rv - normal * Dot(rv, normal);
+    tangent = tangent.unitVector();
+    
+    printf("tangent  %lf %lf\n",tangent.x, tangent.y);
+    
+    if(tangent.size()>0) {
+        float jt = -Dot(rv, tangent);
+        double fj = -(1 + e) * (Dot(rv, tangent));
+        fj /= (A->inv_mass + B->inv_mass);
+        printf("jt  %f\n", jt);
+        jt = jt / (A->inv_mass + B->inv_mass);
+    
+        float mu = sqrt(square(A->staticFriction) + square(B->staticFriction));
+    
+        Vector2D frictionImpulse;
+        if(Absf(jt) < fj * mu)
+            frictionImpulse = tangent * -jt;
+        else {
+            double dynamicFriction = sqrt(square(A->dynamicFriction) + square(B->dynamicFriction));
+            frictionImpulse = tangent * -fj * dynamicFriction;
+        }
+        printf("frictionImpulse  %f %f\n", frictionImpulse.x, frictionImpulse.y);
+        Vector2D AFriction = frictionImpulse;
+        Vector2D BFriction = -frictionImpulse;
+        printf("AFriction  %f %f\n",AFriction.x, AFriction.y);
+        printf("BFriction  %f %f\n",BFriction.x, BFriction.y);
+        A->applyImpulse(AFriction, rA);
+        B->applyImpulse(BFriction, rB);
+        //A->velocity = A->velocity + frictionImpulse * A->inv_mass;
+        //B->velocity = B->velocity - frictionImpulse * B->inv_mass;
+    }
 }

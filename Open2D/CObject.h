@@ -39,6 +39,8 @@ public:
     void accelerate(Vector2D& delta);
     void accelerate(double dVx, double dVy);
     void angularAcc(double delta);
+    void setAngle(double angle);
+    void setAngularVel(double angularVel);
     bool isInPolygon(Vector2D& p);
 
     Vector2D transRotation(const Vector2D& dst);
@@ -61,6 +63,8 @@ public:
     double inertia;
     double inv_inertia;
     double restitution;
+    double staticFriction;
+    double dynamicFriction;
     bool fixed;
 private:
     CPolygon *m_polygon;
