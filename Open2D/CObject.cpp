@@ -49,8 +49,8 @@ CObject::CObject(CSDL_Setup *csdl, int type) {
     angle = 0.f;
     angularVel = 0.f;
     restitution = 0.5;
-    staticFriction = 0.2;
-    dynamicFriction = 0.05;
+    staticFriction = 0.5;
+    dynamicFriction = 0.5;
     pos = Vector2D(0,0);
     velocity = Vector2D(0,0);
 }
@@ -63,6 +63,9 @@ void CObject::move(Vector2D delta) {
 }
 void CObject::move(double dx, double dy) {
     pos.x += dx, pos.y += dy;
+}
+void CObject::setPos(double x, double y) {
+    pos.x = x, pos.y = y;
 }
 void CObject::rotate(double dAngle) {
     angle += dAngle;
@@ -196,6 +199,10 @@ bool CObject::isInPolygon(Vector2D& p) {
     return true;
 }
 
+void ResolveContact() {
+    
+}
+
 void ResolveCollision(CObject *A, CObject *B) {
     int nA, nB;
     int selected = 0;
@@ -204,16 +211,16 @@ void ResolveCollision(CObject *A, CObject *B) {
     if(depthA>=0 || depthB>=0) return;
     Vector2D normal, pVertex;
     int pIndex;
-    double minDepth;
+    double depth;
     if(depthA > depthB) {
         normal = -A->GetNormal(nA);
         pVertex = B->GetSupport(&pIndex, normal);
-        minDepth = depthA;
+        depth = depthA;
         selected = 0;
     } else {
         normal = B->GetNormal(nB);
         pVertex = A->GetSupport(&pIndex, -normal);
-        minDepth = depthB;
+        depth = depthB;
         selected = 1;
     }
     Vector2D rv = B->velocity - A->velocity;
@@ -223,13 +230,12 @@ void ResolveCollision(CObject *A, CObject *B) {
     double velAlongNormal = Dot(rv, normal);
     
     const float percent = 0.8; // usually 20% to 80%
-    Vector2D correction = normal * (minDepth / (A->inv_mass + B->inv_mass)) * percent;
+    Vector2D correction = normal * (depth / (A->inv_mass + B->inv_mass)) * percent;
     A->move(correction * -A->inv_mass);
     B->move(correction * B->inv_mass);
     
     if(velAlongNormal<0) return;
-    
-    Vector2D cp1 = Vector2D(0), cp2 = Vector2D(0);
+    /*Vector2D cp1 = Vector2D(0), cp2 = Vector2D(0);
     Vector2D p1, p2;
     int sIndex;
     if(selected) {
@@ -259,20 +265,64 @@ void ResolveCollision(CObject *A, CObject *B) {
     else if(!cp1.none())
         contact = cp1;
     else if(!cp2.none())
-        contact = cp2;
+        contact = cp2;*/
+    
+    Vector2D cp[2];
+    int cpNum = 0;
+    
+    for(int i=0;i<A->polygon()->m_vertexCount;i++) {
+        Vector2D eA = A->GetVertexAbs(i);
+        Vector2D vA = A->GetVertexVec(i);
+        Vector2D sA = eA - vA;
+        Vector2D normA = Cross(1.0f, vA);
+        for(int j=0;j<B->polygon()->m_vertexCount;j++) {
+            Vector2D eB = B->GetVertexAbs(j);
+            Vector2D vB = B->GetVertexVec(j);
+            Vector2D sB = eB - vB;
+            Vector2D normB = Cross(1.0f, vB);
+            double p1 = Dot(sB - sA, normA) * Dot(eB - eA, normA);
+            double p2 = Dot(sA - sB, normB) * Dot(eA - eB, normB);
+            if(p1<0 && p2<0) {
+                double ix, iy;
+                if(sA.x == eA.x) {
+                    ix = sA.x;
+                    iy = (eB.y - sB.y) * (ix - sB.x) / (eB.x - sB.x) + sB.y;
+                }
+                else if(sB.x == eB.x) {
+                    ix = sB.x;
+                    iy = (eA.y - sA.y) * (ix - sA.x) / (eA.x - sA.x) + sA.y;
+                } else {
+                    ix = sA.x * (eA.y - sA.y) / (eA.x - sA.x) - sB.x * (eB.y - sB.y) / (eB.x - sB.x) + sB.y - sA.y;
+                    ix /=(eA.y - sA.y) / (eA.x - sA.x) - (eB.y - sB.y) / (eB.x - sB.x);
+                    iy = (eA.y - sA.y) * (ix - sA.x) / (eA.x - sA.x) + sA.y;
+                }
+                cp[cpNum++] = Vector2D(ix, iy);
+            }
+        }
+    }
+    
+    Vector2D contact;
+    if(cpNum == 1)
+        contact = cp[0];
+    if(cpNum == 2)
+        contact = (cp[0] + cp[1]) / 2.0f;
     
     Vector2D COMA = A->GetLeftTop() + A->GetCOM();
     Vector2D COMB = B->GetLeftTop() + B->GetCOM();
     Vector2D rA, rB;
+    Vector2D rA2, rB2;
     
-    rA = contact - COMA;
-    rB = contact - COMB;
+    rA = cp[0] - COMA;
+    rB = cp[0] - COMB;
+    rA2 = cp[1] - COMA;
+    rB2 = cp[1] - COMB;
     
-    C_DrawVec(COMA, rA, 1);
-    C_DrawVec(COMB, rB, 1);
+    //C_DrawVec(COMA, rA, 1);
+    //C_DrawVec(COMB, rB, 1);
+    //C_DrawVec(COMA, rA2, 3);
+    //C_DrawVec(COMB, rB2, 3);
     
-    printf("cp1  %f %f\n",cp1.x, cp1.y);
-    printf("cp2  %f %f\n",cp2.x, cp2.y);
+    printf("cpNum  %d\n", cpNum);
     printf("contact  %f %f\n",contact.x, contact.y);
     printf("COMA  %f %f\n",COMA.x, COMA.y);
     printf("COMB  %f %f\n",COMB.x, COMB.y);
@@ -281,14 +331,25 @@ void ResolveCollision(CObject *A, CObject *B) {
     double e = Min(A->restitution, B->restitution);
     double j = -(1 + e) * velAlongNormal;
     
-    j /= ( A->inv_mass + B->inv_mass + A->inv_inertia * square(Cross(rA, normal) + B->inv_inertia * square(Cross(rB, normal))) );
+    j /= ( A->inv_mass + B->inv_mass + A->inv_inertia * square(Cross((rA+rA2)/2, normal) + B->inv_inertia * square(Cross((rB+rB2)/2, normal))) );
+    
+    Vector2D draw = normal * 20;
+    //C_DrawVec(contact, draw, 3);
     
     Vector2D impulse = normal * j;
-    Vector2D AImpulse = -impulse, BImpulse = impulse;
+    Vector2D AImpulse1 = -impulse * rA.size() / (rA.size() + rA2.size()), BImpulse1 = impulse * rB.size() / (rB.size() + rB2.size());
+    Vector2D AImpulse2 = -impulse * rA2.size() / (rA.size() + rA2.size()), BImpulse2 = impulse * rB2.size() / (rB.size() + rB2.size());
     //Vector2D rA = AImpulse * A->inv_mass / A->angularVel;
     //Vector2D rB = BImpulse * B->inv_mass / B->angularVel;
-    A->applyImpulse(AImpulse, rA);
-    B->applyImpulse(BImpulse, rB);
+    A->applyImpulse(AImpulse1, rA);
+    B->applyImpulse(BImpulse1, rB);
+    A->applyImpulse(AImpulse2, rA2);
+    B->applyImpulse(BImpulse2, rB2);
+    
+    Vector2D crA = (rA + rA2) / 2;
+    Vector2D crB = (rB + rB2) / 2;
+    A->angularVel -= (Cross(crA, impulse) * A->inv_inertia) * 180.0f/3.14159f * 0.5f;
+    B->angularVel += (Cross(crB, impulse) * B->inv_inertia) * 180.0f/3.14159f * 0.5f;
     
     
     
@@ -301,28 +362,53 @@ void ResolveCollision(CObject *A, CObject *B) {
     printf("tangent  %lf %lf\n",tangent.x, tangent.y);
     
     if(tangent.size()>0) {
-        float jt = -Dot(rv, tangent);
-        double fj = -(1 + e) * (Dot(rv, tangent));
-        fj /= (A->inv_mass + B->inv_mass);
-        printf("jt  %f\n", jt);
-        jt = jt / (A->inv_mass + B->inv_mass);
+        Vector2D trv1 = (B->velocity + Cross(B->angularVel * 3.14159/180.0f, rB)) - (A->velocity + Cross(A->angularVel * 3.14159/180.0f, rA));
+        Vector2D trv2 = (B->velocity + Cross(B->angularVel * 3.14159/180.0f, rB2)) - (A->velocity + Cross(A->angularVel * 3.14159/180.0f, rA2));
+        Vector2D cross1 = Cross(A->angularVel * 3.14159/180.0f, rA);
+        Vector2D cross2 = Cross(B->angularVel * 3.14159/180.0f, rB);
+        //C_DrawVec(contact, cross1, 1);
+        //C_DrawVec(contact, cross2, 1);
+        float jt1 = -Dot(trv1, tangent);
+        float jt2 = -Dot(trv2, tangent);
+        double fj1 = -(1 + e) * (Dot(trv1, tangent));
+        double fj2 = -(1 + e) * (Dot(trv2, tangent));
+        fj1 /= ( A->inv_mass + B->inv_mass + A->inv_inertia * square(Cross(rA, tangent) + B->inv_inertia * square(Cross(rB, tangent))) );
+        jt1 = jt1 / ( A->inv_mass + B->inv_mass + A->inv_inertia * square(Cross(rA, tangent) + B->inv_inertia * square(Cross(rB, tangent))) );
+        jt2 = jt2 / ( A->inv_mass + B->inv_mass + A->inv_inertia * square(Cross(rA2, tangent) + B->inv_inertia * square(Cross(rB2, tangent))) );
     
         float mu = sqrt(square(A->staticFriction) + square(B->staticFriction));
     
         Vector2D frictionImpulse;
-        if(Absf(jt) < fj * mu)
-            frictionImpulse = tangent * -jt;
+        printf("Absf(jt1)  %f\n", Absf(jt1));
+        printf("fj1 * mu  %f\n", fj1 * mu);
+        if(Absf(jt1) < Absf(fj1 * mu))
+            frictionImpulse = tangent * -jt1;
         else {
             double dynamicFriction = sqrt(square(A->dynamicFriction) + square(B->dynamicFriction));
-            frictionImpulse = tangent * -fj * dynamicFriction;
+            frictionImpulse = tangent * -fj1 * dynamicFriction;
         }
         printf("frictionImpulse  %f %f\n", frictionImpulse.x, frictionImpulse.y);
-        Vector2D AFriction = frictionImpulse;
-        Vector2D BFriction = -frictionImpulse;
+        Vector2D AFriction = frictionImpulse * rA.size() / (rA.size() + rA2.size());
+        Vector2D BFriction = -frictionImpulse * rB.size() / (rB.size() + rB2.size());
         printf("AFriction  %f %f\n",AFriction.x, AFriction.y);
         printf("BFriction  %f %f\n",BFriction.x, BFriction.y);
         A->applyImpulse(AFriction, rA);
         B->applyImpulse(BFriction, rB);
+        
+        
+        if(Absf(jt2) < fj2 * mu)
+            frictionImpulse = tangent * -jt2;
+        else {
+            double dynamicFriction = sqrt(square(A->dynamicFriction) + square(B->dynamicFriction));
+            frictionImpulse = tangent * -fj2 * dynamicFriction;
+        }
+        printf("frictionImpulse  %f %f\n", frictionImpulse.x, frictionImpulse.y);
+        AFriction = frictionImpulse * rA2.size() / (rA.size() + rA2.size());
+        BFriction = -frictionImpulse * rB2.size() / (rB.size() + rB2.size());
+        printf("AFriction  %f %f\n",AFriction.x, AFriction.y);
+        printf("BFriction  %f %f\n",BFriction.x, BFriction.y);
+        A->applyImpulse(AFriction, rA2);
+        B->applyImpulse(BFriction, rB2);
         //A->velocity = A->velocity + frictionImpulse * A->inv_mass;
         //B->velocity = B->velocity - frictionImpulse * B->inv_mass;
     }

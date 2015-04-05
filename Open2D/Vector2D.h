@@ -30,6 +30,8 @@ public:
 };
 double Dot(const Vector2D& a, const Vector2D& b);
 double Cross(const Vector2D& a, const Vector2D& b);
+Vector2D Cross(const Vector2D& a, double scala);
+Vector2D Cross(double scala, const Vector2D& a);
 
 
 #endif /* defined(__Juno2D__Vector2D__) */

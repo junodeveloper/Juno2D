@@ -58,3 +58,9 @@ double Dot(const Vector2D& a, const Vector2D& b) {
 double Cross(const Vector2D& a, const Vector2D& b) {
     return a.x * b.y - a.y * b.x;
 }
+Vector2D Cross(const Vector2D& a, double scala) {
+    return Vector2D(scala * a.y, -scala * a.x);
+}
+Vector2D Cross(double scala, const Vector2D& a) {
+    return Vector2D(-scala * a.y, scala * a.x);
+}

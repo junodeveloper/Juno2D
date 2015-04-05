@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00E2505C1AD0F8A50085332C /* CPair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E2505A1AD0F8A50085332C /* CPair.cpp */; };
 		00E32F4F1AC57E8400F2961A /* CPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E32F4D1AC57E8400F2961A /* CPolygon.cpp */; };
 		00E32F521AC7D18300F2961A /* CGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E32F501AC7D18300F2961A /* CGroup.cpp */; };
 		00E917DE1AC426F400E8968D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E917DD1AC426F400E8968D /* main.cpp */; };
@@ -33,6 +34,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00E2505A1AD0F8A50085332C /* CPair.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPair.cpp; sourceTree = "<group>"; };
+		00E2505B1AD0F8A50085332C /* CPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPair.h; sourceTree = "<group>"; };
 		00E32F4D1AC57E8400F2961A /* CPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPolygon.cpp; sourceTree = "<group>"; };
 		00E32F4E1AC57E8400F2961A /* CPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPolygon.h; sourceTree = "<group>"; };
 		00E32F501AC7D18300F2961A /* CGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CGroup.cpp; sourceTree = "<group>"; };
@@ -42,7 +45,7 @@
 		00E917E41AC426FE00E8968D /* CMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CMain.cpp; sourceTree = "<group>"; };
 		00E917E51AC426FE00E8968D /* CMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMain.h; sourceTree = "<group>"; };
 		00E917E71AC4271600E8968D /* CSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSprite.cpp; sourceTree = "<group>"; };
-		00E917E81AC4271600E8968D /* CSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSprite.h; sourceTree = "<group>"; };
+		00E917E81AC4271600E8968D /* CSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.c.h; path = CSprite.h; sourceTree = "<group>"; };
 		00E917EA1AC4271D00E8968D /* CObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CObject.cpp; sourceTree = "<group>"; };
 		00E917EB1AC4271D00E8968D /* CObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CObject.h; sourceTree = "<group>"; };
 		00E917ED1AC4272400E8968D /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2D.cpp; sourceTree = "<group>"; };
@@ -105,6 +108,8 @@
 				00E32F4E1AC57E8400F2961A /* CPolygon.h */,
 				00E32F501AC7D18300F2961A /* CGroup.cpp */,
 				00E32F511AC7D18300F2961A /* CGroup.h */,
+				00E2505A1AD0F8A50085332C /* CPair.cpp */,
+				00E2505B1AD0F8A50085332C /* CPair.h */,
 			);
 			path = Open2D;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 				00E917E91AC4271600E8968D /* CSprite.cpp in Sources */,
 				00E32F521AC7D18300F2961A /* CGroup.cpp in Sources */,
 				00E917EC1AC4271D00E8968D /* CObject.cpp in Sources */,
+				00E2505C1AD0F8A50085332C /* CPair.cpp in Sources */,
 				00E917EF1AC4272400E8968D /* Vector2D.cpp in Sources */,
 				00E917DE1AC426F400E8968D /* main.cpp in Sources */,
 				00E917F21AC4274500E8968D /* CSDL_Setup.cpp in Sources */,

@@ -41,6 +41,7 @@ public:
     void angularAcc(double delta);
     void setAngle(double angle);
     void setAngularVel(double angularVel);
+    void setPos(double x, double y);
     bool isInPolygon(Vector2D& p);
 
     Vector2D transRotation(const Vector2D& dst);

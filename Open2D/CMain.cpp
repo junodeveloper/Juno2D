@@ -24,6 +24,9 @@ void CMain::Update() {
         obj1->setAngle(0);
         obj1->setAngularVel(0);
     }
+    if(pushed['f' - 'a']) {
+        obj1->setPos(300,0);
+    }
     //printf("penetration : %f\n", Penetration(obj1, obj2));
     group->update();
 }
@@ -90,9 +93,19 @@ void CMain::Init() {
     wall1->move(0,50);
     wall2 = new CObject(csdl, OBJECT_WALL);
     wall2->move(600,50);
+    CObject *obj3, *obj4, *obj5;
+    obj3 = new CObject(csdl, OBJECT_BOX);
+    obj3->move(100,0);
+    obj4 = new CObject(csdl, OBJECT_BOX);
+    obj4->move(300,0);
+    obj5 = new CObject(csdl, OBJECT_BOX);
+    obj5->move(500,0);
     
     group->addObject(obj1);
     group->addObject(obj2);
+    group->addObject(obj3);
+    group->addObject(obj4);
+    group->addObject(obj5);
     group->addObject(ground);
     group->addObject(wall1);
     group->addObject(wall2);
